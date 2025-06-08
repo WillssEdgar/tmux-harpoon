@@ -2,10 +2,10 @@
 
 switch() {
 	selected=$1
-	line_count=$(wc -l < ~/bin/tmux-harpoon/session-list)
+	line_count=$(wc -l < ~/bin/scripts/tmux-harpoon/session-list)
 
 	if [ "$line_count" -ge "$selected" ]; then
-		session=$(sed -n "${selected}p" ~/bin/tmux-harpoon/session-list)
+		session=$(sed -n "${selected}p" ~/bin/scripts/tmux-harpoon/session-list)
 		tmux switch -t "${session}"
 	else
 		echo "There is not a session available"
@@ -14,21 +14,23 @@ switch() {
 
 add() {
 	piped_content=$(cat)
+
 	already_contains=false
 
 	while IFS= read -r line; do
 		if [ "$line" = "$piped_content" ]; then
-			already_contains = true
+			already_contains=true
 		fi
-	done < ~/bin/tmux-harpoon/session-list
+	done < ~/bin/scripts/tmux-harpoon/session-list
 
+	
 	if [ "$already_contains" = false ]; then
-		echo "$piped_content" >> ~/bin/tmux-harpoon/session-list
+		echo "$piped_content" >> ~/bin/scripts/tmux-harpoon/session-list
 	fi
 }
 
 view() {
-	tmux display-popup -d "~/bin/tmux-harpoon/" -E -- sh -c 'vim "$@"' -- ~/bin/tmux-harpoon/session-list
+	tmux display-popup -d "~/bin/scripts/tmux-harpoon/" -E -- sh -c 'vim "$@"' -- ~/bin/scripts/tmux-harpoon/session-list
 }
 
 help() {
